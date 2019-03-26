@@ -1,0 +1,30 @@
+Vagrant.configure("2") do |config|
+#config.vm.box = "ubuntu/trusty64"   ##global diclaration##    
+  config.vm.define "node2" do |node2|
+     
+      node2.vm.box = "ubuntu/trusty64"
+      node2.vm.hostname = 'node2.com'
+      node2.vm.network :forwarded_port, guest: 22, host: 2224
+      node2.vm.network :forwarded_port, guest: 80, host: 8081
+      node2.vm.network "private_network", ip: "10.10.0.2"
+      node2.vm.provision :shell, path: "node2_provision.sh"
+      node2.vm.provider :virtualbox do |v|
+         v.customize ["modifyvm", :id, "--memory" , 1024]
+      end
+  end
+
+  config.vm.define "node3" do |node3|
+      config.vm.box = "ubuntu/trusty64"  
+      node3.vm.hostname = 'node3.com'
+      node3.vm.network :forwarded_port, guest: 22, host: 2225
+      node3.vm.network :forwarded_port, guest: 80, host: 8082
+      node3.vm.network "private_network", ip: "10.10.0.3"
+      node3.vm.provision :shell, path: "node3_provision.sh"
+      node3.vm.provider :virtualbox do |v|
+         v.customize ["modifyvm", :id, "--memory" , 1024]
+      end
+  end
+end
+
+
+
